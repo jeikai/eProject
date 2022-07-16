@@ -1,0 +1,24 @@
+            1em = 16px
+            navbar-expand-mb: khi kích thước medium trở lên thì tự động expand ra
+            navbar-light, bg-light: màu sắc là màu sáng
+            sticky-top: dính chặt phía trên đỉnh
+            container-fluid: chiếm toàn bộ chiều ngang
+            navbar-branch: dùng để làm logo
+            navbar-toggle: nút toggle - tức bấm 1 lần thì hiện ra, bấm lần nữa thì biến mất
+            navbar-toggler-icon: giống biểu tượng menu có 3 gạch
+            navbar-nav: thể hiện các đường link khi ta co, thay đổi kích thước cửa sổ
+            ml-auto: automatically margin left
+			carousel: dùng được dạng slide show của bootstrap
+			slide: trượt qua lại giống slide show
+			carousel-indicators: thanh nhỏ bên dưới để chuyển sang trang khác
+			btn-outline-light: button ko có màu nhưng viền sáng
+			btn-lg: nút to
+			btn-primary: nút có màu xanh da trời
+			container-fluid: cho tràn sang 2 bên
+			text-center: chữ phân bố ra giữa
+			col-12: đối tất cả màn hình thiết bị, gộp 12 dòng làm 1. Tức là nằm tràn ra từ trái sang phải
+			my-4: margin theo trục y tức margin-top và margin-bottom
+			card: giống như card bth có tên, chức danh....
+			card-title: tiêu đề của card
+			card-text: text trong card
+			card-img-top: ảnh ở vị trí trên cùng
