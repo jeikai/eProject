@@ -1,5 +1,12 @@
 <?php 
 	include './component/header.php';
+	session_start();
+	//$customerID = $_SESSION['customerID'];
+/*
+	if ( !isset($customerID) ) {
+		header('Location: log_in.php');
+	}
+	*/
 ?>
 
 <!-- Slide show -->
@@ -9,6 +16,7 @@
 		<li data-target="#slides" data-slide-to="1"></li>
 		<li data-target="#slides" data-slide-to="2"></li>		
 		<li data-target="#slides" data-slide-to="3"></li>
+		<li data-target="#slides" data-slide-to="4"></li>
 	</ul>
 	<div class="carousel-inner">
 		<div class="carousel-item active">
@@ -121,40 +129,34 @@
 	</div>
 	<hr class="my-4">
 </div>
+<!-- In ra sản phẩm -->
 
 <div class="container-fluid padding">
-	<div class="row padding">
-		<div class="col-md-4">
-			<div class="card">
-				<img class="card-img-top" src="./Ảnh_website/anh1.png">
-				<div class="card-body">
-					<h4 class="card-title">Vali Samonite</h4>
-					<p class="card-text">Male</p>
-					<a href="#" class="btn btn-outline-secondary">See detail</a>
+	<?php 
+		$sql = "SELECT * FROM products";
+		$statement = $connection->prepare($sql);
+        $statement->execute();
+    	//Chế độ đọc dữ liệu ra
+        $result = $statement->setFetchMode ( PDO::FETCH_ASSOC);
+		$sp = $statement->fetchAll();
+		foreach ( $sp as $sp) {
+	?>
+			<div class="col-md-4"style="width: 33.33333%;float: left;">
+				<div class="card">
+					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['img'];?>">
+					<div class="card-body">
+						<h4 class="card-title"><?php echo $sp['name_product'];?></h4>
+						<p class="card-text">Màu sắc: <?php echo $sp['color'];?></p>
+						<p class="card-text">Size: <?php echo $sp['size'];?></p>
+						<p class="card-text">Thương hiệu: <?php echo $sp['brand'];?></p>
+						<p class="card-text">Giá: <?php echo $sp['price'];?></p>
+						<a href="#" class="btn btn-outline-secondary">See detail</a>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-md-4">
-			<div class="card">
-				<img class="card-img-top" src="./Ảnh_website/anh2.png">
-				<div class="card-body">
-					<h4 class="card-title">Vali Gucci</h4>
-					<p class="card-text">Male</p>
-					<a href="#" class="btn btn-outline-secondary">See detail</a>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
-			<div class="card">
-				<img class="card-img-top" src="./Ảnh_website/anh3.png">
-				<div class="card-body">
-					<h4 class="card-title">Vali Lipault</h4>
-					<p class="card-text">Baby</p>
-					<a href="#" class="btn btn-outline-secondary">See detail</a>
-				</div>
-			</div>
-		</div>
-	</div>
+	<?php
+		}
+	?>
 </div>
 
 <?php

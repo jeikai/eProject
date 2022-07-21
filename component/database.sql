@@ -1,41 +1,35 @@
 create database eProject;
 use eProject;
-CREATE TABLE IF NOT EXISTS customer (
-	customerID int NOT NULL,
-	name nvarchar(30),
-	phone varchar(10),
-	address nvarchar(50),
-	city nvarchar(20)
-);
-CREATE TABLE IF NOT EXISTS orders (
-	orderID int NOT NULL,
-	customerID int,
-	oderDate date,
-	price float
-);
-CREATE TABLE IF NOT EXISTS detail (
-	detailID int NOT NULL,
-	orderID int,
-	quantity int,
-	productID int,
-);
-CREATE TABLE IF NOT EXISTS products (
-	productID int NOT NULL,
-	size float,
-	color nvarchar(20),
-	price float,
-	name_product nvarchar(50)
-);
-CREATE TABLE IF NOT EXISTS account (
-	phone varchar(10) NOT NULL,
-	user_name varchar(100),
-	password char(40)
-); 
+        CREATE TABLE customer (
+                customerID int PRIMARY KEY,
+                user_name nvarchar(30) NOT NULL,
+                phone varchar(10) NOT NULL,
+                address nvarchar(50) NOT NULL,
+                password char(40) NOT NULL           
+        );
+        CREATE TABLE orders (
+            orderID int PRIMARY KEY,
+            customerID int NOT NULL,
+            orderDate date NOT NULL,
+            price float NOT NULL,
+            quantity int NOT NULL,
+            productID int NOT NULL,
+            name_product nvarchar(50) NOT NULL
+        );
+
+        CREATE TABLE products (
+            productID int PRIMARY KEY,
+            size float NOT NULL,    
+            color nvarchar(20) NOT NULL,
+            price float NOT NULL,
+            name_product nvarchar(50) NOT NULL,
+            type nvarchar(50) NOT NULL,
+            img nvarchar(100) NOT NULL,
+            brand nvarchar(20) NOT NULL
+        );
 alter table orders add constraint pk_id_order primary key(orderID);
 
 alter table customer add constraint pk_id_customer primary key(customerID);
-
-alter table details add constraint pk_id_detail primary key(detailID);
 
 alter table products add constraint pk_id_product primary key(productID);
 

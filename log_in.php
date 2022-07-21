@@ -1,16 +1,18 @@
 <?php
 	include './component/database.php';
+	session_start();
+
 	$error = "";
 	if ( isset( $_POST['sign_in']) ) {
-		header('Location: ./home_page.php');
-		$user_name = htmlspecialchars($_POST['email'] ?? ''); 
+		
+		$phone = htmlspecialchars($_POST['phone'] ?? ''); 
         $password = htmlspecialchars($_POST['password'] ?? '');  
 		
-		if(empty($user_name) || empty($password)) {
-            $error = "You must enter username or password";            
+		if(empty($phone) || empty($password)) {
+            $error = "You must enter your phone, email or password";            
         } else {
 
-            $sql = "SELECT * FROM account WHERE user_name='$user_name'; ";            
+            $sql = "SELECT * FROM customer WHERE phone='$phone'; ";            
             if ( $connection != NULL) {
             try {
                 
@@ -26,13 +28,14 @@
                     $password_hash = $result[0]['password'];
                     
                     if($password_hash == sha1($password)) {
-                        
+						$_SESSION['customerID'] = $result['customerID'];
+                        header('Location: ./home_page.php');
                     } else {
-                        $error = "Wrong username or password";
+                        $error = "Wrong phone number or password";
                     }
                     
                 } else {
-                    $error = "Wrong username or password";
+                    $error = "Wrong phone number or password";
                 }                
             } catch(PDOException $e) {
                 $error = "Cannot execute sql: " . $e->getMessage();
@@ -60,7 +63,7 @@
 	<form action= "<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" >
 	<div class="login">
 		<div class="type">
-			<input type="email" placeholder="Email address or phone number" class="textbox" required name="email">
+			<input type="telephone" placeholder="Phone number" class="textbox" required name="phone">
 		</div>
 		<div class="type">
 			<input type="password" placeholder="Password" class="textbox" required name="password">

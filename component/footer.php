@@ -1,6 +1,6 @@
 <!-- Footer -->
-<footer>
-	<div class="container-fluid padding">	
+<footer style="float: left;width: 100%;">
+	<div class="container-fluid padding" >	
 		<div class="row text-center">
 			<div class="col-md-4">
 				<img src="./Ảnh_website/logo_1.png" >
