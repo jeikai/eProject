@@ -2,3 +2,11 @@
 input {
     background: #c0bfbf;
 }
+.title {
+    text-align: center;
+}
+a {
+    color: #9490ce;
+    text-decoration: underline;
+    cursor: pointer;
+}

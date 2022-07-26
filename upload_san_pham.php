@@ -1,28 +1,28 @@
 <?php
     include './component/header.php';
-
-    $img = "";
-    $name_product = htmlspecialchars( $_POST['name_product'] ?? '');
-    $size = htmlspecialchars( $_POST['size'] ?? '');
+    $imgUrls = ""; 
+    $productName = htmlspecialchars( $_POST['productName'] ?? '');
+    $weight = htmlspecialchars( $_POST['weight'] ?? '');
     $color = htmlspecialchars( $_POST['color'] ?? '');
-    $type = htmlspecialchars( $_POST['type'] ?? '');
+    $categoryName = htmlspecialchars( $_POST['categoryName'] ?? '');
     $price = htmlspecialchars( $_POST['price'] ?? '');
     $brand = htmlspecialchars( $_POST['brand'] ?? '');
-    $productID = time();
     $check = false;
+    $productId = time();
+    $categoryId = time();
     if ( isset($_POST['submit'])) {
         //Kiểm duyệt file ảnh
         $permitted_extensions = ['png', 'jpg', 'jpeg', 'gif'];
         //Tên file
-        $file_name = $_FILES['upload']['name'];
+        $file_name = $_FILES['imgUrls']['name'];
         if( !empty( $file_name )) {
             
             //Nơi nguồn
-            $file_tmp_name = $_FILES['upload']['tmp_name'];
+            $file_tmp_name = $_FILES['imgUrls']['tmp_name'];
  
             //nơi đích chứa file được upload lên
             $destination = "./Ảnh_sp/${file_name}";
-            $img .= $file_name;
+            $imgUrls = $file_name;
             
             //Lấy ra đuôi file bằng hàm explode
             //Khi gặp dấu chấm, hàm sẽ tách chuỗi đó ra
@@ -37,11 +37,11 @@
             } else {
                 $error_message = 'Invalid file type';
             }
-        if ( empty($name_product) || empty($size) || empty($color) || empty($type) || empty($price)) {
-            $error_message = "You must enter name, size, color, type, brand and price.";
+        if ( empty($productName) || empty($weight) || empty($color) || empty($categoryName) || empty($price) || empty($brand)) {
+            $error_message = "You must enter name, weight, color, category, brand and price.";
         } else {
             if ( $connection != NULL) {
-                $sql = "SELECT COUNT(*) AS count FROM products WHERE name_product='$name_product'";            
+                $sql = "SELECT COUNT(*) AS count FROM Products WHERE productName='$productName' AND weight='$weight'";            
             try {
                 $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $statement = $connection->prepare($sql); 
@@ -55,10 +55,11 @@
                     if ($check ) {
                         //Upload file từ nơi nguồn lên đích là destination
                         move_uploaded_file($file_tmp_name, $destination);
+                        
                     }
-                    $sql = "INSERT INTO products(productID, size, color, price, name_product, type, img, brand) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";                    
-                    $connection->prepare($sql)->execute([$productID, $size, $color, $price, $name_product, $type, $img, $brand]);
-                    $error_message = '<p style= "color: green;">Thêm sản phẩm thành công</p>';
+                        $sql = "INSERT INTO Products(productId, weight, color, price, productName, categoryId, imageUrls, brand) VALUES(?, ?, ?, ?, ?, ?, ?, ?); INSERT INTO Categories(categoryId, categoryName) VALUES(?, ?)";                    
+                        $connection->prepare($sql)->execute([$productId, $weight, $color, $price, $productName, $categoryId, $imgUrls, $brand, $categoryId, $categoryName]);
+                        $error_message = '<p style= "color: green;">Thêm sản phẩm thành công</p>';
                 };
                 
             } catch(PDOException $e) {
@@ -71,19 +72,23 @@
         }
  
     }
+    
 ?>
 <head>
     <link rel="stylesheet" href="./css/upload_san_pham.css">
 </head>
+<h1 style="text-align: center;">Bảng upload sản phẩm</h1>
+<hr>
 <div  style="margin-left: 300px;" >
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post"  enctype="multipart/form-data">
         <table style="width: 50%;height: 300px;">
             <tr>
                 <td>Tên sản phẩm: </td>
-                <td><input type="text" name="name_product" id="" require placeholder="Your product name"></td>      
+                <td><input type="text" name="productName" id="" require placeholder="Your product name"></td>      
             </tr>
             <tr>
-                <td>Size: </td>
-                <td><input type="number" name="size" id="" require placeholder="Your product size"></td>
+                <td>Cân nặng: </td>
+                <td><input type="number" name="weight" id="" require placeholder="Your product size"></td>
             </tr>
             <tr>
                 <td>Màu sắc: </td>
@@ -92,7 +97,7 @@
             <tr>
                 <td>Phân loại: </td>
                 <td>
-                    <input type="text" name="type" list="listdata" require placeholder="Type of your product">
+                    <input type="text" name="categoryName" list="listdata" require placeholder="Type of your product">
 		            <datalist id="listdata">
                         <option  selected>MALE</option>
                         <option >FEMALE</option>
@@ -111,8 +116,7 @@
             <tr>
                 <td>Ảnh sản phẩm:<br>(Tối đa 5 ảnh)</td>
                 <td>
-                    <input type="file" name="upload" require >
-                    
+                    <input type="file" name="imgUrls" require >
                 </td>
 
             </tr>
@@ -126,9 +130,53 @@
     </form>
     <p style= "color: red;"><?php echo $error_message ?? '' ?></p>
 </div>
+<caption ><h2 class="title">Sản phẩm đã đăng</h2></caption>
+<table border="1px" width="100%" cellspacing="0" cellpadding="5px" >
+    
+    <thead align="center">
+    <tr>
+        <th>ID</th>
+        <th>Tên sản phẩm</th>
+        <th>Cân nặng</th>
+        <th>Màu sắc</th>
+        <th>Phân loại</th>
+        <th>Thương hiệu</th>
+        <th>Ảnh sản phẩm</th>
+        <th>Giá bán</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody align="center">
+    <?php
+        
+        $sql = "SELECT * FROM Products";
+        $statement = $connection->prepare($sql);
+        $statement->execute();
+        //Chế độ đọc dữ liệu ra
+        $result = $statement->setFetchMode ( PDO::FETCH_ASSOC);
+        $sp = $statement->fetchAll();
+        foreach( $sp as $sp) {
+    ?>
+    <tr>
+        <td><?php echo $sp['productId'];?></td>
+        <td><?php echo $sp['productName'];?></td>
+        <td><?php echo $sp['weight'];?></td>
+        <td><?php echo $sp['color'];?></td>
+        <td><?php echo $sp['categoryId'];?></td>
+        <td><?php echo $sp['brand'];?></td>
+        <td><img style="width: 100px;" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>"></td>
+        <td><?php echo $sp['price'];?></td>
+        <td><a  href="./<?php echo 'upload_san_pham.php?delete='.$sp['productId'];?>" onclick="return confirm('are your sure you want to delete this?');"><i class="fas fa-trash"></i>Delete</a></td>
+        <td><a href="./<?php echo 'upload_san_pham.php?edit='.$sp['productId'];?>"><i class="fas fa-edit"></i>Update</a></td>
+    </tr>
+    <?php
+        }
+    ?>
+    </tbody>
+</table>
 </body>
 </html>
-
+    
 <?php
     include './component/footer.php';
 ?>

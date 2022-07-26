@@ -133,7 +133,7 @@
 
 <div class="container-fluid padding">
 	<?php 
-		$sql = "SELECT * FROM products";
+		$sql = "SELECT * FROM Products";
 		$statement = $connection->prepare($sql);
         $statement->execute();
     	//Chế độ đọc dữ liệu ra
@@ -143,11 +143,11 @@
 	?>
 			<div class="col-md-4"style="width: 33.33333%;float: left;">
 				<div class="card">
-					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['img'];?>">
+					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>">
 					<div class="card-body">
-						<h4 class="card-title"><?php echo $sp['name_product'];?></h4>
+						<h4 class="card-title"><?php echo $sp['productName'];?></h4>
 						<p class="card-text">Màu sắc: <?php echo $sp['color'];?></p>
-						<p class="card-text">Size: <?php echo $sp['size'];?></p>
+						<p class="card-text">Weight: <?php echo $sp['weight'];?></p>
 						<p class="card-text">Thương hiệu: <?php echo $sp['brand'];?></p>
 						<p class="card-text">Giá: <?php echo $sp['price'];?></p>
 						<a href="#" class="btn btn-outline-secondary">See detail</a>

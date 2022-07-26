@@ -1,35 +1,59 @@
-create database eProject;
-use eProject;
-        CREATE TABLE customer (
-                customerID int PRIMARY KEY,
-                user_name nvarchar(30) NOT NULL,
-                phone varchar(10) NOT NULL,
-                address nvarchar(50) NOT NULL,
-                password char(40) NOT NULL           
-        );
-        CREATE TABLE orders (
-            orderID int PRIMARY KEY,
-            customerID int NOT NULL,
-            orderDate date NOT NULL,
-            price float NOT NULL,
-            quantity int NOT NULL,
-            productID int NOT NULL,
-            name_product nvarchar(50) NOT NULL
-        );
+CREATE DATABASE eProject;
+USE eProject;
+CREATE TABLE Users(
+    userId INT AUTO_INCREMENT PRIMARY KEY,
+    userName NVARCHAR(20),
+    phoneNumber VARCHAR(20) NOT NULL,
+    password VARCHAR(100) NOT NULL, 
+    address NVARCHAR(100) DEFAULT '',
+    role VARCHAR(10) DEFAULT 'user'
+);
 
-        CREATE TABLE products (
-            productID int PRIMARY KEY,
-            size float NOT NULL,    
-            color nvarchar(20) NOT NULL,
-            price float NOT NULL,
-            name_product nvarchar(50) NOT NULL,
-            type nvarchar(50) NOT NULL,
-            img nvarchar(100) NOT NULL,
-            brand nvarchar(20) NOT NULL
-        );
-alter table orders add constraint pk_id_order primary key(orderID);
+CREATE TABLE Orders(
+    orderId INT AUTO_INCREMENT PRIMARY KEY,    
+    userId INT,
+    orderDate DATETIME,
+    description TEXT DEFAULT ''    
+);
 
-alter table customer add constraint pk_id_customer primary key(customerID);
 
-alter table products add constraint pk_id_product primary key(productID);
 
+CREATE TABLE OrderDetails(
+    OrderDetailID INT AUTO_INCREMENT PRIMARY KEY,
+    orderId INT, 
+    productId INT,
+    price FLOAT,
+    quantity INT
+);
+
+CREATE TABLE Products(
+    productId INT PRIMARY KEY,
+    weight float NOT NULL,    
+    color varchar(20) NOT NULL,
+    price float NOT NULL,
+    productName VARCHAR(150) NOT NULL,
+    categoryId INT,
+    imageUrls VARCHAR(300),
+    brand VARCHAR(50)
+);
+
+CREATE TABLE Categories (
+    categoryId INT PRIMARY KEY,
+    categoryName VARCHAR(150) NOT NULL
+);
+
+ALTER TABLE Products
+ADD CONSTRAINT FK_Products_Categories
+FOREIGN KEY (categoryId) REFERENCES Categories(categoryId); 
+
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Orders_Users
+FOREIGN KEY (userId) REFERENCES Users(userId); 
+
+ALTER TABLE OrderDetails
+ADD CONSTRAINT CK_OrderDetails_quantity
+CHECK (quantity > 0 AND quantity <=10); 
+
+ALTER TABLE OrderDetails
+ADD CONSTRAINT FK_OrderDetail_Product
+FOREIGN KEY (productId) REFERENCES Products(productId); 

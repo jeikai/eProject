@@ -1,0 +1,103 @@
+<?php
+    include './component/database.php';
+    $error = '';
+    $userId = time();
+    $userName = htmlspecialchars( $_POST['userName'] ?? '');
+    $phoneNumber = htmlspecialchars( $_POST['phoneNumber'] ?? '');
+    $password = htmlspecialchars( $_POST['password'] ?? '');
+    $role = htmlspecialchars( $_POST['role'] ?? '');
+    $address = htmlspecialchars( $_POST['address'] ?? '');
+    
+    if ( isset( $_POST['submit']) ) {
+        
+        
+        if ( empty($userName) || empty($phoneNumber) || empty($password) || empty($role) || empty($address)) {
+            $error = "You must enter your username, password, phonenumber, address and your role";
+        } else { 
+            if ( $connection != NULL) {
+                $sql = "SELECT COUNT(*) AS count FROM Users WHERE phoneNumber='$phoneNumber';";            
+            try {
+                $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $statement = $connection->prepare($sql); 
+                $statement->execute();
+                $statement->setFetchMode(PDO::FETCH_ASSOC); 
+                //Kiểm tra xem dữ liệu bản ghi đã tồn tại hay chưa
+                if(intval($statement->fetchAll()[0]['count']) > 0) {
+                    $error = "User exists";
+                } else {
+                    //ok to insert
+                    
+                    $sql = "INSERT INTO Users(userId, userName, phoneNumber, address, password, role) VALUES(?, ?, ?, ?, ?, ?);";                    
+                    $connection->prepare($sql)->execute([$userId, $userName, $phoneNumber, $address, $password, $role]);
+                    $error = "Register user successfully";
+                    header('Location: ./log_in.php');
+                };
+                
+            } catch(PDOException $e) {
+                echo "Cannot execute sql: " . $e->getMessage();
+            }
+            }
+        }
+    }
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    
+    <meta name="viewport" content="wisth=device-width, intial-scale=1.0">
+    <link rel="stylesheet" href="./css/register.css">
+</head>
+
+<body style="background: #cbced3;">
+
+    <div class="container">
+        <div class="title">Registration</div>
+        
+            <div class="user-details">
+                <form action= "<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" >
+                <div class="input-box">
+                    <span class="details">UserName</span>
+                    <input type="text" placeholder="Enter your userName"  name="userName">
+                </div>
+                <div class="input-box">
+                    <span class="details">Your address</span>
+                    <input type="text" placeholder="Enter your address"  name="address">
+                </div>
+                <div class="input-box">
+                    <span class="details">Phone Number</span>
+                    <input type="text" placeholder="Enter your number"  name="phoneNumber">
+                </div>
+                <div class="input-box">
+                    <span class="details">Password</span>
+                    <input type="password" placeholder="Enter your password"  name="password">
+                </div>
+                <div class="input-box"> 
+                    <span class="details">You are user or admin?</span>
+                    <select name="role" id="">
+                        <option value="user" selected>user</option>
+                        <option value="admin" >admin</option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <a href="./log_in.php">Already have an account.</a>
+                </div>
+                <div class="input-box">
+                    <p style="color: red;"><?php echo $error;?></p>
+                </div>
+                <div class="button">
+                    <input type="submit" value="Register" name="submit">
+                    
+                </div>
+                </form>
+            </div>
+        </form>
+    </div>
+    
+</body>
+
+</html>
