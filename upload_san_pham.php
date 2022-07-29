@@ -1,5 +1,11 @@
 <?php
-    include './component/header.php';
+    include './component/header_as_admin.php';
+    session_start();
+	$userId = $_SESSION['userId'];
+	
+	if ( !isset($userId) ) {
+		header('Location: log_in.php');
+	}
     $imgUrls = ""; 
     $productName = htmlspecialchars( $_POST['productName'] ?? '');
     $weight = htmlspecialchars( $_POST['weight'] ?? '');
@@ -7,9 +13,9 @@
     $categoryName = htmlspecialchars( $_POST['categoryName'] ?? '');
     $price = htmlspecialchars( $_POST['price'] ?? '');
     $brand = htmlspecialchars( $_POST['brand'] ?? '');
+    $gender = htmlspecialchars( $_POST['gender'] ?? '');
     $check = false;
     $productId = time();
-    $categoryId = time();
     if ( isset($_POST['submit'])) {
         //Kiểm duyệt file ảnh
         $permitted_extensions = ['png', 'jpg', 'jpeg', 'gif'];
@@ -41,7 +47,7 @@
             $error_message = "You must enter name, weight, color, category, brand and price.";
         } else {
             if ( $connection != NULL) {
-                $sql = "SELECT COUNT(*) AS count FROM Products WHERE productName='$productName' AND weight='$weight'";            
+                $sql = "SELECT COUNT(*) AS count FROM Products WHERE productName='$productName' AND weight='$weight' AND color='$color' AND categoryName='$categoryName' AND price='$price' AND brand='$brand' ";            
             try {
                 $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $statement = $connection->prepare($sql); 
@@ -57,11 +63,11 @@
                         move_uploaded_file($file_tmp_name, $destination);
                         
                     }
-                        $sql = "INSERT INTO Products(productId, weight, color, price, productName, categoryId, imageUrls, brand) VALUES(?, ?, ?, ?, ?, ?, ?, ?); INSERT INTO Categories(categoryId, categoryName) VALUES(?, ?)";                    
-                        $connection->prepare($sql)->execute([$productId, $weight, $color, $price, $productName, $categoryId, $imgUrls, $brand, $categoryId, $categoryName]);
+                        $sql = "INSERT INTO Products(productId, weight, color, price, productName, categoryName, gender,  imageUrls, brand) 
+                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";                    
+                        $connection->prepare($sql)->execute([$productId, $weight, $color, $price, $productName, $categoryName,$gender, $imgUrls, $brand]);
                         $error_message = '<p style= "color: green;">Thêm sản phẩm thành công</p>';
                 };
-                
             } catch(PDOException $e) {
                 echo "Cannot execute sql: " . $e->getMessage();
             }
@@ -72,7 +78,12 @@
         }
  
     }
-    
+    if ( isset( $_GET['delete'])) {
+        $delete_id = $_GET['delete'];
+        $sql = "DELETE FROM Products WHERE productId = $delete_id";
+        $connection->prepare($sql)->execute();
+        header('Location: ./upload_san_pham.php');
+    }
 ?>
 <head>
     <link rel="stylesheet" href="./css/upload_san_pham.css">
@@ -97,21 +108,36 @@
             <tr>
                 <td>Phân loại: </td>
                 <td>
-                    <input type="text" name="categoryName" list="listdata" require placeholder="Type of your product">
-		            <datalist id="listdata">
-                        <option  selected>MALE</option>
-                        <option >FEMALE</option>
-                        <option >BABY</option>
-                        <option >ADULT</option>
-                        <option >TEENAGER</option>
-                        <option ></option>
-                        
-                    </datalist>
+                    <input type="text" name="categoryName" list="listdata" require placeholder="Your type">
+                    <datalist id="listdata">
+                            <option value="adult">ADULT</option>
+                            <option value="children">CHILDREN</option>
+                            <option value="teenager">TEENAGER</option>
+                        </datalist> 
+                </td>
+            </tr>
+            <tr>
+                <td>Giới tính: </td>
+                <td>
+                    <select name="gender" id="">
+                        <option value="male" selected>Nam</option>
+                        <option value="female" >Nữ</option>
+                    </select>
                 </td>
             </tr>
             <tr>
                 <td>Thương hiệu: </td>
-                <td><input type="text" name="brand" id="" placeholder="Brand name"></td>
+                <td>
+                    <input type="text" name="brand" id="data" placeholder="Brand name">
+                    <datalist id="data">
+                            <option >VICTORINOX</option>
+                            <option >SAMONITE</option>
+                            <option >HUBLOT</option>
+                            <option >FOSSIL</option>
+                            <option >FENDI</option>
+                            <option >LIPAULT</option>
+                    </datalist>
+                </td>
             </tr>
             <tr>
                 <td>Ảnh sản phẩm:<br>(Tối đa 5 ảnh)</td>
@@ -139,6 +165,7 @@
         <th>Tên sản phẩm</th>
         <th>Cân nặng</th>
         <th>Màu sắc</th>
+        <th>Giới tính</th>
         <th>Phân loại</th>
         <th>Thương hiệu</th>
         <th>Ảnh sản phẩm</th>
@@ -160,14 +187,15 @@
     <tr>
         <td><?php echo $sp['productId'];?></td>
         <td><?php echo $sp['productName'];?></td>
-        <td><?php echo $sp['weight'];?></td>
+        <td><?php echo $sp['weight'];?>kg</td>
         <td><?php echo $sp['color'];?></td>
-        <td><?php echo $sp['categoryId'];?></td>
+        <td><?php echo $sp['gender']?></td>
+        <td><?php echo $sp['categoryName'];?></td>
         <td><?php echo $sp['brand'];?></td>
         <td><img style="width: 100px;" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>"></td>
-        <td><?php echo $sp['price'];?></td>
+        <td><?php echo $sp['price'];?>$</td>
         <td><a  href="./<?php echo 'upload_san_pham.php?delete='.$sp['productId'];?>" onclick="return confirm('are your sure you want to delete this?');"><i class="fas fa-trash"></i>Delete</a></td>
-        <td><a href="./<?php echo 'upload_san_pham.php?edit='.$sp['productId'];?>"><i class="fas fa-edit"></i>Update</a></td>
+        <td><a href="./<?php echo 'update.php?edit='.$sp['productId'];?>"><i class="fas fa-edit"></i>Update</a></td>
     </tr>
     <?php
         }

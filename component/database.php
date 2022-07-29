@@ -4,7 +4,6 @@
     define('DB_USER_NAME', 'root');
     define('DB_PASSWORD', '');
     
-    function db_connect() { 
         $sql_create_db = "CREATE DATABASE IF NOT EXISTS ".DB_NAME; 
     
         //pdo = PHP Data Object
@@ -27,8 +26,5 @@
         } catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }   
-        return $connection; 
-    }
-    $connection = db_connect();
-    
+        
 ?>

@@ -11,6 +11,7 @@
 		if(empty($phone) || empty($password)) {
             $error = "You must enter your phone, email or password";            
         } else {
+			if( $connection) {
             	$sql = "SELECT * FROM Users; "; 
                 $statement = $connection->prepare($sql); 
                 $statement->execute();
@@ -29,12 +30,13 @@
 					} else {
 						$error = "Wrong phone number or password";
 					}   
-				}            
+				} 
+			}           
         }
 		
 	}
 	else if ( isset( $_POST['register']) ) {
-		header('Location: ./login/register.php');
+		header('Location: ./register.php');
 	}
 	
 ?>
@@ -68,7 +70,7 @@
 			<input type="submit" value="Log In" class="logIn" name="sign_in">
 		</div>
 		<div class="type">
-			<a href="./login/forgot_password.php" class="forget_pass" name="forgot_pass">Forgotten password?</a>
+			<a href="./forgot_password.php" class="forget_pass" name="forgot_pass">Forgotten password?</a>
 		</div>
 		<div >
 			<hr style="width: 90%;color: #e4e6e9;">

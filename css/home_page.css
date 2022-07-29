@@ -61,4 +61,53 @@ footer {
 .card-img-top {
     height: 300px;
 }
-
+.box{
+    text-transform: none;
+    padding:1.2rem 1.4rem;
+    font-size: 1.7rem;
+    color:var(--black);
+    border-radius: .5rem;
+    background-color: var(--white);
+    margin:1rem 0;
+    width: 100%;
+ }
+ .edit-form-container form .box{
+    width: 100%;
+    background-color: var(--bg-color);
+    border-radius: .5rem;
+    margin:1rem 0;
+    font-size: 1.7rem;
+    color:var(--black);
+    padding:1.2rem 1.4rem;
+    text-transform: none;
+ }
+ .message{
+    background-color: var(--blue);
+    position: sticky;
+    top:0; left:0;
+    z-index: 10000;
+    border-radius: .5rem;
+    background-color: var(--white);
+    padding:1.5rem 2rem;
+    margin:0 auto;
+    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:1.5rem;
+ }
+ 
+ .message span{
+    font-size: 2rem;
+    color:var(--black);
+ }
+ 
+ .message i{
+    font-size: 2.5rem;
+    color:var(--black);
+    cursor: pointer;
+ }
+ 
+ .message i:hover{
+    color:var(--red);
+ }

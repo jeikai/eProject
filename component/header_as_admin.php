@@ -42,26 +42,10 @@
 		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<a class="nav-link active" href="./home_page.php">Home</a>
-				</li>
-				<li class="nav-item">
 					<a class="nav-link" href="#">About us</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="#">Contact us</a>
-				</li>
-
-				<?php
-					$sql = "SELECT * FROM orderdetails";
-					$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-					$statement = $connection->prepare($sql);
-					$statement->execute();
-					$statement->setFetchMode(PDO::FETCH_ASSOC);	
-					$result = $statement->fetchAll();
-					$num = count($result);
-				?> 
-				<li class="nav-item">
-					<a class="nav-link" href="./cart.php"><i class="fas fa-cart-arrow-down"></i><?php echo $num;?></a>
 				</li>
 				<li class="nav-item">
 					<a href="./log_in.php" class="nav-link">&#10162</a>
