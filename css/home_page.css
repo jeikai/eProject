@@ -51,12 +51,12 @@ html{
     border-top: 2px dotted rgba(62,44,100, 0.6);
 	width: 95%;	
 }
-.nav-link:hover {
+.col-md-4:hover {
     color: red;
     cursor: pointer;
 }
 footer {
-    background-color: rgb(135, 134, 132);
+    background-color: transparent;
 }
 .card-img-top {
     height: 300px;
@@ -80,6 +80,16 @@ footer {
     color:var(--black);
     padding:1.2rem 1.4rem;
     text-transform: none;
+ }
+ .add-product-form .box{
+    text-transform: none;
+    padding:1.2rem 1.4rem;
+    font-size: 1.7rem;
+    color:var(--black);
+    border-radius: .5rem;
+    background-color: var(--white);
+    margin:1rem 0;
+    width: 100%;
  }
  .message{
     background-color: var(--blue);
@@ -111,3 +121,29 @@ footer {
  .message i:hover{
     color:var(--red);
  }
+.container-fluid {
+    float: left;
+    width: 100%;
+}
+.search-container button {
+    float: right;
+    padding: 6px 10px;
+    background: #ddd;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+
+}
+.search-container button:hover {
+    background: rgb(89, 87, 87);
+}
+input[type=text] {
+    padding: 6px;
+    width: 100%;
+    background: wheat;
+    font-size: 17px;
+    border-radius: 5px;
+    }
+input[type=text]:hover {
+    background: rgb(183, 180, 180);
+}

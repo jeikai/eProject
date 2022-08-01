@@ -1,6 +1,15 @@
 <?php
     include './component/database.php';
+	session_start();
+	$userId = $_SESSION['userId'];
 	
+	if ( !isset($userId) ) {
+		header('Location: log_in.php');
+	}
+	if ( isset( $_POST['log_out'])) {
+		session_destroy();
+		header('Location: log_in.php');
+	}
 ?>
 
 <!DOCTYPE html>
@@ -27,14 +36,29 @@
 		}
 	</style>
 </head>
-<body >
-
+<body style="background: linear-gradient(135deg, #71b7e6, #b6346c);" >
 <!-- Navigation -->
-<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top" >
 	<div class="container-fluid">
 		<a class="navbar-branch" href="#">
-			<img src="./Ảnh_website/logo_1.png" height="50">
+			<img src="./Ảnh_website/logo.png" height="50" >
 		</a>
+
+		<?php
+			$sql = "SELECT * FROM Users WHERE userId = $userId;";
+			$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$statement = $connection->prepare($sql);
+			$statement->execute();
+			$statement->setFetchMode(PDO::FETCH_ASSOC);	
+			$userName = $statement->fetchAll();
+			foreach ( $userName as $userName) {
+		?>
+		<p class="navbar-branch">
+			༼ つ ◕‿◕ ༽つHi...<?php echo $userName['userName'];?>←(>▽<)ﾉ ⟵(๑¯◡¯๑) ☜ (↼_↼) ←(*꒪ヮ꒪*) ⟵(o_O) ｡.ﾟ+ ⟵(｡･ω･)
+		</p>
+		<?php
+			}
+		?>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" 
 			data-target="#navbarResponsive">
 			<span class="navbar-toggler-icon"></span>
@@ -45,14 +69,11 @@
 					<a class="nav-link active" href="./home_page.php">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">About us</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Contact us</a>
+					<a class="nav-link" href="./about_us.php">About us</a>
 				</li>
 
 				<?php
-					$sql = "SELECT * FROM orderdetails";
+					$sql = "SELECT * FROM orderdetails WHERE userId = $userId";
 					$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 					$statement = $connection->prepare($sql);
 					$statement->execute();
@@ -64,10 +85,13 @@
 					<a class="nav-link" href="./cart.php"><i class="fas fa-cart-arrow-down"></i><?php echo $num;?></a>
 				</li>
 				<li class="nav-item">
-					<a href="./log_in.php" class="nav-link">&#10162</a>
+					<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+					<input type="submit" value="&#10162" name="log_out" style="font-size: 20px;" class="nav-link">
+					</form>
 				</li>
 				
 			</ul>
 		</div>
 	</div>
 </nav>
+

@@ -1,6 +1,11 @@
 <?php
     include './component/database.php';
+	session_start();
+	$userId = $_SESSION['userId'];
 	
+	if ( !isset($userId) ) {
+		header('Location: log_in.php');
+	}
 ?>
 
 <!DOCTYPE html>
@@ -27,26 +32,36 @@
 		}
 	</style>
 </head>
-<body >
+<body style="background: linear-gradient(135deg, #71b7e6, #b6346c);" >
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
 	<div class="container-fluid">
 		<a class="navbar-branch" href="#">
-			<img src="./Ảnh_website/logo_1.png" height="50">
+			<img src="./Ảnh_website/logo.png" height="50">
 		</a>
+		<?php
+			$sql = "SELECT * FROM Users WHERE userId = $userId;";
+			$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$statement = $connection->prepare($sql);
+			$statement->execute();
+			$statement->setFetchMode(PDO::FETCH_ASSOC);	
+			$userName = $statement->fetchAll();
+			foreach ( $userName as $userName) {
+		?>
+		<p class="navbar-branch">
+			༼ つ ◕‿◕ ༽つHi...<?php echo $userName['userName'];?>←(>▽<)ﾉ ⟵(๑¯◡¯๑) ☜ (↼_↼) ←(*꒪ヮ꒪*) ⟵(o_O) ｡.ﾟ+ ⟵(｡･ω･)
+		</p>
+		<?php
+			}
+		?>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" 
 			data-target="#navbarResponsive">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item">
-					<a class="nav-link" href="#">About us</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Contact us</a>
-				</li>
+				
 				<li class="nav-item">
 					<a href="./log_in.php" class="nav-link">&#10162</a>
 				</li>

@@ -1,11 +1,6 @@
 <?php
     include './component/header_as_admin.php';
-    session_start();
-	$userId = $_SESSION['userId'];
-	
-	if ( !isset($userId) ) {
-		header('Location: log_in.php');
-	}
+
     $imgUrls = ""; 
     $productName = htmlspecialchars( $_POST['productName'] ?? '');
     $weight = htmlspecialchars( $_POST['weight'] ?? '');
@@ -99,7 +94,7 @@
             </tr>
             <tr>
                 <td>Cân nặng: </td>
-                <td><input type="number" name="weight" id="" require placeholder="Your product size"></td>
+                <td><input type="number" name="weight" id="" min=0 require placeholder="Your product size"></td>
             </tr>
             <tr>
                 <td>Màu sắc: </td>
@@ -113,7 +108,7 @@
                             <option value="adult">ADULT</option>
                             <option value="children">CHILDREN</option>
                             <option value="teenager">TEENAGER</option>
-                        </datalist> 
+                    </datalist> 
                 </td>
             </tr>
             <tr>

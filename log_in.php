@@ -40,6 +40,7 @@
 	}
 	
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,7 +59,7 @@
 	<form action= "<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" >
 	<div class="login">
 		<div class="type">
-			<input type="number " placeholder="Phone number" class="textbox"  name="phone">
+			<input type="number" placeholder="Phone number" class="textbox"  name="phone">
 		</div>
 		<div class="type">
 			<input type="password" placeholder="Password" class="textbox" name="password">

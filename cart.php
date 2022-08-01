@@ -1,13 +1,6 @@
 <?php
     include './component/header.php';
     
-	session_start();
-	$userId = $_SESSION['userId'];
-	
-	if ( !isset($userId) ) {
-		header('Location: log_in.php');
-	}
-    
     if ( isset( $_GET['delete'])) {
         $delete_id = $_GET['delete'];
         $sql = "DELETE FROM orderdetails WHERE productId = $delete_id";
@@ -46,7 +39,7 @@
         <?php
             $grand_total =0;
             $sql = "SELECT * FROM orderdetails a JOIN Products b 
-            ON a.productId = b.productId";
+            ON a.productId = b.productId WHERE a.userId = $userId";
             $statement = $connection->prepare($sql);
             $statement->execute();
             //Chế độ đọc dữ liệu ra

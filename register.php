@@ -7,7 +7,15 @@
     $password = htmlspecialchars( $_POST['password'] ?? '');
     $role = htmlspecialchars( $_POST['role'] ?? '');
     $address = htmlspecialchars( $_POST['address'] ?? '');
-    
+    function validate($phoneNumber, $password) {
+        if ( strlen($phoneNumber) != 10) {
+            return false;
+        } 
+        if ( strlen($password) <=4) {
+            return false;
+        }
+        return true;
+    }
     if ( isset( $_POST['submit']) ) {
         
         
@@ -26,11 +34,12 @@
                     $error = "User exists";
                 } else {
                     //ok to insert
-                    
+                    if ( validate($phoneNumber, $password) ) {
                     $sql = "INSERT INTO Users(userId, userName, phoneNumber, address, password, role) VALUES(?, ?, ?, ?, ?, ?);";                    
                     $connection->prepare($sql)->execute([$userId, $userName, $phoneNumber, $address, $password, $role]);
                     $error = "Register user successfully";
                     header('Location: ./log_in.php');
+                    }
                 };
                 
             } catch(PDOException $e) {
@@ -39,6 +48,7 @@
             }
         }
     }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,7 +69,7 @@
         <div class="title">Registration</div>
         
             <div class="user-details">
-                <form action= "<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" >
+                <form action= "<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" name="register">
                 <div class="input-box">
                     <span class="details">UserName</span>
                     <input type="text" placeholder="Enter your userName"  name="userName">
@@ -70,7 +80,7 @@
                 </div>
                 <div class="input-box">
                     <span class="details">Phone Number</span>
-                    <input type="text" placeholder="Enter your number"  name="phoneNumber">
+                    <input type="number" placeholder="Enter your number"  name="phoneNumber">
                 </div>
                 <div class="input-box">
                     <span class="details">Password</span>
@@ -90,7 +100,7 @@
                     <p style="color: red;"><?php echo $error;?></p>
                 </div>
                 <div class="button">
-                    <input type="submit" value="Register" name="submit">
+                    <input type="submit" value="Register" name="submit" onclick="xuli()">
                     
                 </div>
                 </form>
@@ -99,5 +109,16 @@
     </div>
     
 </body>
-
+<script>
+    function xuli() {
+        with(register) {
+            if ( phoneNumber.value.length != 10) {
+                alert("Phone number must have 10 digits");
+            }
+            if ( password.value.length <=4) {
+                alert( "Your password is too short!" );
+            }
+        }
+    }
+</script>
 </html>
