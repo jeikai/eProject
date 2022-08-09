@@ -32,7 +32,7 @@
 		}
 	</style>
 </head>
-<body style="background: linear-gradient(135deg, #71b7e6, #b6346c);" >
+<body style="background: #84cdca;" >
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
@@ -41,6 +41,7 @@
 			<img src="./Ảnh_website/logo.png" height="50">
 		</a>
 		<?php
+			if ( $connection != NULL) {
 			$sql = "SELECT * FROM Users WHERE userId = $userId;";
 			$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$statement = $connection->prepare($sql);
@@ -54,6 +55,7 @@
 		</p>
 		<?php
 			}
+		}
 		?>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" 
 			data-target="#navbarResponsive">

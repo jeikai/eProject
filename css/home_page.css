@@ -17,7 +17,7 @@
     color: black !important;
 }
 .navbar li a:hover {
-    color: red !important;
+    color: #e27d5f !important;
 }
 .nav-item a {
     /* Đổ bóng cho text */
@@ -52,7 +52,7 @@ html{
 	width: 95%;	
 }
 .col-md-4:hover {
-    color: red;
+    color: #e27d5f;
     cursor: pointer;
 }
 footer {
@@ -147,3 +147,48 @@ input[type=text] {
 input[type=text]:hover {
     background: rgb(183, 180, 180);
 }
+
+.time {
+    text-align: center;
+    font-size: 100px;
+    font-family: Comic Sans MS;
+    -webkit-text-stroke: 0.5px rgb(39, 211, 41);
+}
+.neonText {
+    color: #fff;
+    text-shadow:
+        0 0 7px #fff,
+        0 0 10px #fff,
+        0 0 21px #fff,
+        0 0 42px #e8a87c,
+        0 0 82px #e8a87c,
+        0 0 92px #e8a87c,
+        0 0 102px #e8a87c,
+        0 0 151px #e8a87c;
+  }
+  
+  h1 {
+    font-size: 4.2rem;
+    text-transform: uppercase;
+    animation: flicker 1.5s infinite alternate;     
+  }
+  @keyframes flicker {
+    
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+  
+        text-shadow:
+        0 0 4px #fff,
+        0 0 11px #fff,
+        0 0 19px #fff,
+        0 0 40px #e8a87c,
+        0 0 80px #e8a87c,
+        0 0 90px #e8a87c,
+        0 0 100px #e8a87c,
+        0 0 150px #e8a87c;
+    
+    }
+    
+    20%, 24%, 55% {        
+        text-shadow: none;
+    }    
+  }
