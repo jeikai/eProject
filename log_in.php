@@ -53,7 +53,7 @@
 </head>
 <body style="background:#cbced3; " >
 	<div class="divtitle">
-	<div class="title">BROX LUGGAGE</div>
+	<div class="title">BRONX LUGGAGE</div>
 	<div class="subtitle"><caption>Start your journey</caption></div>
 	</div>
 	<form action= "<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" >

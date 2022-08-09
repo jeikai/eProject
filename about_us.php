@@ -14,7 +14,7 @@
         <div class="container">
             <div class="content-section">
                 <div class="title">
-                    <h2>Welcome To Brox Luggage</h2>
+                    <h2>Welcome To Bronx Luggage</h2>
                 </div>
                 <div class="content">
 

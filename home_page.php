@@ -28,7 +28,16 @@
 			echo "Cannot execute sql: " . $e->getMessage();
 		}
 	}
-	
+	$filter = '';
+	function select_from($filter, $connection) {
+		$sql = "SELECT * FROM Products WHERE brand = '$filter';";
+		$statement = $connection->prepare($sql);
+        $statement->execute();
+    	//Chế độ đọc dữ liệu ra
+        $result = $statement->setFetchMode ( PDO::FETCH_ASSOC);
+		$sp = $statement->fetchAll();
+		return $sp;
+	}
 ?>
 <!-- Notification -->
 <?php
@@ -41,11 +50,11 @@ if(isset($message)){
 
 <!-- Search button -->
 <div class="search-container nav-link">
-	<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+	<form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 	<input type="text" placeholder="Search.." name="search">
-	<!-- <button type="submit"><i class="fa fa-search"></i></button> -->
 	</form>
 </div>
+
 <!-- Slide show -->
 <div id="slides" class="carousel slide" data-ride="carousel">
 	<ul class="carousel-indicators">
@@ -74,10 +83,15 @@ if(isset($message)){
 	</div>
 </div>
 
+<!-- Time -->
+<hr>
+<p id="myTime" class="time neonText"></p>
+<hr>
+
 <div class="container-fluid padding">
 	<div class="row welcome text-center">
 		<div class="col-12">
-			<h1 class="display-4">Welcome to Brox Luggage</h1>
+			<h1 class="display-4 neonText">Welcome to Bronx Luggage</h1>
 		</div>
 		<!-- Horizontal Rule -->
 		<hr> 
@@ -90,25 +104,20 @@ if(isset($message)){
 <!-- Category -->
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <div class="container-fluid padding">
-	<div class="row text-center padding">
-		
-		<div class="col-xs-12 col-sm-6 col-md-4 " >
-			
+	<div class="row text-center padding">		
+		<div class="col-xs-12 col-sm-6 col-md-4 " >			
 				<i class="fa fa-child"></i>	
 				<h3>CHILDREN</h3>
 				<p>4 - 12 years old</p>
 				<input type="radio" name="category" value="children" id="">
-		</div>
-		
+		</div>		
 		<div class="col-xs-12 col-sm-6 col-md-4">	
 			<i class="fas fa-running"></i>			
 			<h3>TEENAGER</h3>
 			<p>13 - 18 years old</p>
 			<input type="radio" value="teenager" name="category">
-
 		</div>
 		<div class="col-sm-12 col-md-4">
-			
 			<i class="fas fa-hiking"></i>
 			<h3>ADULT</h3>
 			<p>> 18 years old</p>
@@ -120,8 +129,8 @@ if(isset($message)){
 	
 	<hr class="my-4">	
 </div>
-<!-- Gender -->
 
+<!-- Gender -->
 <div class="container-fluid padding">
 	<div class="row text-center padding">
 		<div class="col-md-4">
@@ -143,26 +152,27 @@ if(isset($message)){
 	<hr class="my-4">	
 </div>
 </form>
+
 <!-- brand name -->
 <div class="container-fluid padding" >
 	<div class="row text-center" >
 		<div class="col-md-2 ">
-			<a href="#Victorinox"><img src="./Ảnh_website/logo_1.png" alt="" style="width: 200px"></a>
+			<a href="home_page.php?search=Victorinox"><img src="./Ảnh_website/logo_1.png" alt="" style="width: 200px"></a>
 		</div>
 		<div class="col-md-2 ">
-			<a href="#samsonite"><img src="./Ảnh_website/logo_2.png" alt="" style="width: 200px"></a>
+			<a href="home_page.php?search=samsonite"><img src="./Ảnh_website/logo_2.png" alt="" style="width: 200px"></a>
 		</div>
 		<div class="col-md-2 ">
-			<a href="#hublot"><img src="./Ảnh_website/logo_3.png" alt="" style="width: 200px"></a>
+			<a href="home_page.php?search=hublot"><img src="./Ảnh_website/logo_3.png" alt="" style="width: 200px"></a>
 		</div>
 		<div class="col-md-2 ">
-			<a href="#fossil"><img src="./Ảnh_website/logo_4.png" alt="" style="width: 200px"></a>
+			<a href="home_page.php?search=fossil"><img src="./Ảnh_website/logo_4.png" alt="" style="width: 200px"></a>
 		</div>
 		<div class="col-md-2 ">
-			<a href="#fendi"><img src="./Ảnh_website/logo_5.png" alt="" style="width: 200px"></a>
+			<a href="home_page.php?search=fendi"><img src="./Ảnh_website/logo_5.png" alt="" style="width: 200px"></a>
 		</div>
 		<div class="col-md-2 ">
-			<a href="#lipault"><img src="./Ảnh_website/logo_6.png" alt="" style="width: 200px"></a>
+			<a href="home_page.php?search=Lipault"><img src="./Ảnh_website/logo_6.png" alt="" style="width: 200px"></a>
 		</div>
 	</div>
 	<hr class="my-4">
@@ -181,25 +191,9 @@ if(isset($message)){
 		$sp = $statement->fetchAll();
 			foreach ( $sp as $sp) {
 ?>
-		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-			<div class="col-md-4"style="width: 33.33333%;float: left;">
-				<div class="card">
-					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>">
-					<div class="card-body">
-						<h4 class="card-title" ><?php echo $sp['productName'];?></h4>
-						<input type="hidden" class="card-text" name="productId" value="<?php echo $sp['productId'];?> ">
-						<p class="card-text" >Màu sắc: <?php echo $sp['color'];?></p>
-						<p class="card-text" >Weight: <?php echo $sp['weight'];?></p>
-						<p class="card-text">Giới tính: <?php echo $sp['gender']?></p>
-						<p class="card-text">Phân loại: <?php echo $sp['categoryName'];?></p>
-						<p class="card-text" >Thương hiệu: <?php echo $sp['brand'];?></p>
-						<input type="hidden" class="card-text" name="price" value="<?php echo $sp['price'];?> ">
-						<p class="card-text">Giá: <?php echo $sp['price'];?>$</p>
-						<input type="submit" class="btn btn-outline-secondary" value="add to cart" name="add_to_cart">
-					</div>
-				</div>
-			</div>
-	</form>		
+		<?php
+			include './detail_product.php';
+		?>	
 	<?php
 		}
 	
@@ -213,25 +207,9 @@ if(isset($message)){
 		$sp = $statement->fetchAll();
 			foreach ( $sp as $sp) {
 	?>	
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-			<div class="col-md-4"style="width: 33.33333%;float: left;">
-				<div class="card">
-					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>">
-					<div class="card-body">
-						<h4 class="card-title" ><?php echo $sp['productName'];?></h4>
-						<input type="hidden" class="card-text" name="productId" value="<?php echo $sp['productId'];?> ">
-						<p class="card-text" >Màu sắc: <?php echo $sp['color'];?></p>
-						<p class="card-text" >Weight: <?php echo $sp['weight'];?></p>
-						<p class="card-text">Giới tính: <?php echo $sp['gender']?></p>
-						<p class="card-text">Phân loại: <?php echo $sp['categoryName'];?></p>
-						<p class="card-text" >Thương hiệu: <?php echo $sp['brand'];?></p>
-						<input type="hidden" class="card-text" name="price" value="<?php echo $sp['price'];?> ">
-						<p class="card-text">Giá: <?php echo $sp['price'];?>$</p>
-						<input type="submit" class="btn btn-outline-secondary" value="add to cart" name="add_to_cart">
-					</div>
-				</div>
-			</div>
-	</form>	
+	<?php
+			include './detail_product.php';
+		?>	
 	<?php 	
 	}
 	}else if ( isset( $_POST['gender'])) {
@@ -243,30 +221,14 @@ if(isset($message)){
 		$sp = $statement->fetchAll();
 			foreach ( $sp as $sp) {	
 	?>
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-			<div class="col-md-4"style="width: 33.33333%;float: left;">
-				<div class="card">
-					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>">
-					<div class="card-body">
-						<h4 class="card-title" ><?php echo $sp['productName'];?></h4>
-						<input type="hidden" class="card-text" name="productId" value="<?php echo $sp['productId'];?> ">
-						<p class="card-text" >Màu sắc: <?php echo $sp['color'];?></p>
-						<p class="card-text" >Weight: <?php echo $sp['weight'];?></p>
-						<p class="card-text">Giới tính: <?php echo $sp['gender']?></p>
-						<p class="card-text">Phân loại: <?php echo $sp['categoryName'];?></p>
-						<p class="card-text" >Thương hiệu: <?php echo $sp['brand'];?></p>
-						<input type="hidden" class="card-text" name="price" value="<?php echo $sp['price'];?> ">
-						<p class="card-text">Giá: <?php echo $sp['price'];?>$</p>
-						<input type="submit" class="btn btn-outline-secondary" value="add to cart" name="add_to_cart">
-					</div>
-				</div>
-			</div>
-	</form>	
+	<?php
+			include './detail_product.php';
+		?>	
 	<?php 
 			}
 	}
-	else if( isset( $_POST['search'])) {
-		$ket_qua = $_POST['search'] ;
+	else if( isset( $_GET['search'])) {
+		$ket_qua = $_GET['search'] ;
 		$array = explode(" ", $ket_qua);
 		$name = "";
 		foreach( $array as $array) {
@@ -283,33 +245,15 @@ if(isset($message)){
 ?>
 <div class="container-fluid padding">
 		<?php
-			foreach ( $sp as $sp) {
-				
+			foreach ( $sp as $sp) {		
 		?>
-		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-			<div class="col-md-4"style="width: 33.33333%;float: left;">
-				<div class="card">
-					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>">
-					<div class="card-body">
-						<h4 class="card-title" ><?php echo $sp['productName'];?></h4>
-						<input type="hidden" class="card-text" name="productId" value="<?php echo $sp['productId'];?> ">
-						<p class="card-text" >Màu sắc: <?php echo $sp['color'];?></p>
-						<p class="card-text" >Weight: <?php echo $sp['weight'];?></p>
-						<p class="card-text">Giới tính: <?php echo $sp['gender']?></p>
-						<p class="card-text">Phân loại: <?php echo $sp['categoryName'];?></p>
-						<p class="card-text" >Thương hiệu: <?php echo $sp['brand'];?></p>
-						<input type="hidden" class="card-text" name="price" value="<?php echo $sp['price'];?> ">
-						<p class="card-text">Giá: <?php echo $sp['price'];?>$</p>
-						<input type="submit" class="btn btn-outline-secondary" value="add to cart" name="add_to_cart">
-					</div>
-				</div>
-			</div>
-	</form>		
+		<?php
+			include './detail_product.php';
+		?>	
 	<?php
 		}
 	?>
 </div>
-
 <?php
 			}
 			
@@ -318,36 +262,14 @@ if(isset($message)){
 
 <div class="container-fluid padding">
 	<hr>
-	<a  name="Victorinox"><h2 style="text-align: center;">Victorinox</h2></a>
+	<a  name="Victorinox"><h2 style="text-align: center;"><?php echo $filter ="Victorinox"; ?></h2></a>
 	<?php 
-		$sql = "SELECT * FROM Products WHERE brand = 'Victorinox';";
-		$statement = $connection->prepare($sql);
-        $statement->execute();
-    	//Chế độ đọc dữ liệu ra
-        $result = $statement->setFetchMode ( PDO::FETCH_ASSOC);
-		$sp = $statement->fetchAll();
-		
+		$sp = select_from($filter, $connection);
 		foreach ( $sp as $sp) {
 	?>
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-			<div class="col-md-4"style="width: 33.33333%;float: left;">
-				<div class="card">
-					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>">
-					<div class="card-body">
-						<h4 class="card-title" ><?php echo $sp['productName'];?></h4>
-						<input type="hidden" class="card-text" name="productId" value="<?php echo $sp['productId'];?> ">
-						<p class="card-text" >Màu sắc: <?php echo $sp['color'];?></p>
-						<p class="card-text" >Weight: <?php echo $sp['weight'];?></p>
-						<p class="card-text">Giới tính: <?php echo $sp['gender']?></p>
-						<p class="card-text">Phân loại: <?php echo $sp['categoryName'];?></p>
-						<p class="card-text" >Thương hiệu: <?php echo $sp['brand'];?></p>
-						<input type="hidden" class="card-text" name="price" value="<?php echo $sp['price'];?> ">
-						<p class="card-text">Giá: <?php echo $sp['price'];?>$</p>
-						<input type="submit" class="btn btn-outline-secondary" value="add to cart" name="add_to_cart">
-					</div>
-				</div>
-			</div>
-	</form>		
+	<?php
+			include './detail_product.php';
+	?>	
 	<?php
 		}
 	?>
@@ -357,36 +279,14 @@ if(isset($message)){
 
 <div class="container-fluid padding">
 	<hr>
-	<a  name="samsonite"><h2 style="text-align: center;">Samonite</h2></a>
+	<a  name="samsonite"><h2 style="text-align: center;"><?php echo $filter ="Samsonite"; ?></h2></a>
 	<?php 
-		$sql = "SELECT * FROM Products WHERE brand = 'samonite';";
-		$statement = $connection->prepare($sql);
-        $statement->execute();
-    	//Chế độ đọc dữ liệu ra
-        $result = $statement->setFetchMode ( PDO::FETCH_ASSOC);
-		$sp = $statement->fetchAll();
-		
+		$sp = select_from($filter, $connection);
 		foreach ( $sp as $sp) {
 	?>
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-			<div class="col-md-4"style="width: 33.33333%;float: left;">
-				<div class="card">
-					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>">
-					<div class="card-body">
-						<h4 class="card-title" ><?php echo $sp['productName'];?></h4>
-						<input type="hidden" class="card-text" name="productId" value="<?php echo $sp['productId'];?> ">
-						<p class="card-text" >Màu sắc: <?php echo $sp['color'];?></p>
-						<p class="card-text" >Weight: <?php echo $sp['weight'];?></p>
-						<p class="card-text">Giới tính: <?php echo $sp['gender']?></p>
-						<p class="card-text">Phân loại: <?php echo $sp['categoryName'];?></p>
-						<p class="card-text" >Thương hiệu: <?php echo $sp['brand'];?></p>
-						<input type="hidden" class="card-text" name="price" value="<?php echo $sp['price'];?> ">
-						<p class="card-text">Giá: <?php echo $sp['price'];?>$</p>
-						<input type="submit" class="btn btn-outline-secondary" value="add to cart" name="add_to_cart">
-					</div>
-				</div>
-			</div>
-	</form>		
+	<?php
+			include './detail_product.php';
+		?>	
 	<?php
 		}
 	?>
@@ -396,36 +296,14 @@ if(isset($message)){
 
 <div class="container-fluid padding">
 	<hr>
-	<a  name="hublot"><h2 style="text-align: center;">Hublot</h2></a>
+	<a  name="hublot"><h2 style="text-align: center;"><?php echo $filter ="Hublot"; ?></h2></a>
 	<?php 
-		$sql = "SELECT * FROM Products WHERE brand = 'Hublot';";
-		$statement = $connection->prepare($sql);
-        $statement->execute();
-    	//Chế độ đọc dữ liệu ra
-        $result = $statement->setFetchMode ( PDO::FETCH_ASSOC);
-		$sp = $statement->fetchAll();
-		
+		$sp = select_from($filter, $connection);
 		foreach ( $sp as $sp) {
 	?>
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-			<div class="col-md-4"style="width: 33.33333%;float: left;">
-				<div class="card">
-					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>">
-					<div class="card-body">
-						<h4 class="card-title" ><?php echo $sp['productName'];?></h4>
-						<input type="hidden" class="card-text" name="productId" value="<?php echo $sp['productId'];?> ">
-						<p class="card-text" >Màu sắc: <?php echo $sp['color'];?></p>
-						<p class="card-text" >Weight: <?php echo $sp['weight'];?></p>
-						<p class="card-text">Giới tính: <?php echo $sp['gender']?></p>
-						<p class="card-text">Phân loại: <?php echo $sp['categoryName'];?></p>
-						<p class="card-text" >Thương hiệu: <?php echo $sp['brand'];?></p>
-						<input type="hidden" class="card-text" name="price" value="<?php echo $sp['price'];?> ">
-						<p class="card-text">Giá: <?php echo $sp['price'];?>$</p>
-						<input type="submit" class="btn btn-outline-secondary" value="add to cart" name="add_to_cart">
-					</div>
-				</div>
-			</div>
-	</form>		
+	<?php
+			include './detail_product.php';
+		?>	
 	<?php
 		}
 	?>
@@ -434,36 +312,14 @@ if(isset($message)){
 
 <div class="container-fluid padding">
 	<hr>
-	<a  name="fossil"><h2 style="text-align: center;">Fossil</h2></a>
+	<a  name="fossil"><h2 style="text-align: center;"><?php echo $filter ="Fossil"; ?></h2></a>
 	<?php 
-		$sql = "SELECT * FROM Products WHERE brand = 'Fossil';";
-		$statement = $connection->prepare($sql);
-        $statement->execute();
-    	//Chế độ đọc dữ liệu ra
-        $result = $statement->setFetchMode ( PDO::FETCH_ASSOC);
-		$sp = $statement->fetchAll();
-		
+		$sp = select_from($filter, $connection);
 		foreach ( $sp as $sp) {
 	?>
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-			<div class="col-md-4"style="width: 33.33333%;float: left;">
-				<div class="card">
-					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>">
-					<div class="card-body">
-						<h4 class="card-title" ><?php echo $sp['productName'];?></h4>
-						<input type="hidden" class="card-text" name="productId" value="<?php echo $sp['productId'];?> ">
-						<p class="card-text" >Màu sắc: <?php echo $sp['color'];?></p>
-						<p class="card-text" >Weight: <?php echo $sp['weight'];?></p>
-						<p class="card-text">Giới tính: <?php echo $sp['gender']?></p>
-						<p class="card-text">Phân loại: <?php echo $sp['categoryName'];?></p>
-						<p class="card-text" >Thương hiệu: <?php echo $sp['brand'];?></p>
-						<input type="hidden" class="card-text" name="price" value="<?php echo $sp['price'];?> ">
-						<p class="card-text">Giá: <?php echo $sp['price'];?>$</p>
-						<input type="submit" class="btn btn-outline-secondary" value="add to cart" name="add_to_cart">
-					</div>
-				</div>
-			</div>
-	</form>		
+	<?php
+			include './detail_product.php';
+		?>	
 	<?php
 		}
 	?>
@@ -471,36 +327,14 @@ if(isset($message)){
 
 <div class="container-fluid padding">
 	<hr>
-	<a  name="fendi"><h2 style="text-align: center;">Fendi</h2></a>
+	<a  name="fendi"><h2 style="text-align: center;"><?php echo $filter ="Fendi"; ?></h2></a>
 	<?php 
-		$sql = "SELECT * FROM Products WHERE brand = 'Fendi';";
-		$statement = $connection->prepare($sql);
-        $statement->execute();
-    	//Chế độ đọc dữ liệu ra
-        $result = $statement->setFetchMode ( PDO::FETCH_ASSOC);
-		$sp = $statement->fetchAll();
-		
+		$sp = select_from($filter, $connection);
 		foreach ( $sp as $sp) {
 	?>
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-			<div class="col-md-4"style="width: 33.33333%;float: left;">
-				<div class="card">
-					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>">
-					<div class="card-body">
-						<h4 class="card-title" ><?php echo $sp['productName'];?></h4>
-						<input type="hidden" class="card-text" name="productId" value="<?php echo $sp['productId'];?> ">
-						<p class="card-text" >Màu sắc: <?php echo $sp['color'];?></p>
-						<p class="card-text" >Weight: <?php echo $sp['weight'];?></p>
-						<p class="card-text">Giới tính: <?php echo $sp['gender']?></p>
-						<p class="card-text">Phân loại: <?php echo $sp['categoryName'];?></p>
-						<p class="card-text" >Thương hiệu: <?php echo $sp['brand'];?></p>
-						<input type="hidden" class="card-text" name="price" value="<?php echo $sp['price'];?> ">
-						<p class="card-text">Giá: <?php echo $sp['price'];?>$</p>
-						<input type="submit" class="btn btn-outline-secondary" value="add to cart" name="add_to_cart">
-					</div>
-				</div>
-			</div>
-	</form>		
+	<?php
+			include './detail_product.php';
+		?>	
 	<?php
 		}
 	?>
@@ -508,36 +342,14 @@ if(isset($message)){
 
 <div class="container-fluid padding">
 	<hr>
-	<a  name="lipault"><h2 style="text-align: center;">Lipault</h2></a>
+	<a  name="lipault"><h2 style="text-align: center;"><?php echo $filter ="Lipault"; ?></h2></a>
 	<?php 
-		$sql = "SELECT * FROM Products WHERE brand = 'Lipault';";
-		$statement = $connection->prepare($sql);
-        $statement->execute();
-    	//Chế độ đọc dữ liệu ra
-        $result = $statement->setFetchMode ( PDO::FETCH_ASSOC);
-		$sp = $statement->fetchAll();
-		
+		$sp = select_from($filter, $connection);
 		foreach ( $sp as $sp) {
 	?>
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-			<div class="col-md-4"style="width: 33.33333%;float: left;">
-				<div class="card">
-					<img class="card-img-top" src="./Ảnh_sp/<?php echo $sp['imageUrls'];?>">
-					<div class="card-body">
-						<h4 class="card-title" ><?php echo $sp['productName'];?></h4>
-						<input type="hidden" class="card-text" name="productId" value="<?php echo $sp['productId'];?> ">
-						<p class="card-text" >Màu sắc: <?php echo $sp['color'];?></p>
-						<p class="card-text" >Weight: <?php echo $sp['weight'];?></p>
-						<p class="card-text">Giới tính: <?php echo $sp['gender']?></p>
-						<p class="card-text">Phân loại: <?php echo $sp['categoryName'];?></p>
-						<p class="card-text" >Thương hiệu: <?php echo $sp['brand'];?></p>
-						<input type="hidden" class="card-text" name="price" value="<?php echo $sp['price'];?> ">
-						<p class="card-text">Giá: <?php echo $sp['price'];?>$</p>
-						<input type="submit" class="btn btn-outline-secondary" value="add to cart" name="add_to_cart">
-					</div>
-				</div>
-			</div>
-	</form>		
+	<?php
+			include './detail_product.php';
+		?>	
 	<?php
 		}
 	?>
@@ -545,9 +357,9 @@ if(isset($message)){
 <?php
 	}
 ?>
+
+<script src="./js/javascript.js"></script>
 <?php
 	include './component/footer.php';
-
-
 ?>
 

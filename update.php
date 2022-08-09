@@ -8,7 +8,7 @@
 ?>
 <div  style="margin-left: 300px;" >
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post"  enctype="multipart/form-data">
-    <table >
+    <table>
     <?php 
     $sql_update = "SELECT * FROM Products WHERE productId = $edit_id";
     try {        
@@ -20,50 +20,70 @@
         foreach ( $product as $product) {
     ?>
             <tr>
-                <td>Ảnh sản phẩm: </td>
-                <td><img src="./Ảnh_sp/<?php echo $product['imageUrls']; $image = $product['imageUrls'];?>" alt="" height="200"></td>
+                <td>Picture of product </td>
+                <td>
+                <?php
+                    $id = $product['productId'];
+                    $sql = "SELECT * FROM Image_Product WHERE productId = '$id'; ";
+                    $statement = $connection->prepare($sql);
+                    $statement->execute();
+                    //Chế độ đọc dữ liệu ra
+                    $result = $statement->setFetchMode ( PDO::FETCH_ASSOC);
+                    $img = $statement->fetchAll();
+                    $anh_sp = '';
+                    foreach( $img as $img) {
+                        $anh_sp = explode(', ', $img['imageUrls']);
+                    }
+                    foreach( $anh_sp as $anh_sp) {
+                ?>
+            <img style="width: 100px;" src="./Ảnh_sp/<?php echo $anh_sp;?>">
+            <?php
+                
+                }
+            ?>
+            </td>
             </tr>
             <tr>
                 <input type="hidden" name="id" value="<?php echo $product['productId'];?>" id="">
             </tr>
             <tr>
-                <td>Tên sản phẩm: </td>
+                <td>Name: </td>
                 <td><input type="text" class="box" name="update_name" value="<?php echo $product['productName'];?>" id=""></td>      
             </tr>
             <tr>
-                <td>Cân nặng: </td>
+                <td>Weight: </td>
                 <td><input type="number" min="0" class="box"  name="update_weight" value="<?php echo $product['weight'];?>"></td>
             </tr>
             <tr>
-                <td>Màu sắc: </td>
+                <td>Color: </td>
                 <td><input type="text" class="box" name="update_color" value="<?php echo $product['color'];?>" id=""></td>
             </tr>
             <tr>
-                <td>Phân loại: </td>
+                <td>Category: </td>
                 <td>
                 <input type="text" class="box" name="update_category" value="<?php echo $product['categoryName'];?>" id="">
                 </td>
             </tr>
             <tr>
-                <td>Giới tính: </td>
+                <td>Gender: </td>
                 <td>
                 <input type="text" class="box" name="update_gender" value="<?php echo $product['gender'];?>" id="">
             </tr>
             <tr>
-                <td>Thương hiệu: </td>
+                <td>Brand: </td>
                 <td>
                 <input type="text" class="box" name="update_brand" value="<?php echo $product['brand'];?>" id="">
                 </td>
             </tr>
             <tr>
-                <td>Ảnh sản phẩm:<br>(Tối đa 5 ảnh)</td>
+                <td>Picture:</td>
                 <td>
-                <input type="file" class="box"  name="update_image" accept="image/png, image/jpg, image/jpeg" value="<?php echo $product['imageUrls']?>">
+                <input type="file" class="box"  name="update_image[]" accept="image/png, image/jpg, image/jpeg" multiple>
                 </td>
 
             </tr>
             <tr>
-                <td>Giá bán: </td>
+                <td>Price: </td>
                 <td><input type="number" name="price" min=0 id="" require value="<?php echo $product['price'];?>">$</td>
             </tr>
         
@@ -83,34 +103,47 @@
     </form>
 </div>
 <?php
-    if ( isset($_POST['cancel'])) {
-        header('Location: ./upload_san_pham.php');
-    }
     if ( isset($_POST['update_product'])) {
         $id = $_POST['id'];
         $update_name = $_POST['update_name'] ?? '';
         $update_price = $_POST['price'] ?? '';
-
-        $update_image = $_FILES['update_image']['name'] ?? $image;
-        $update_image_tmp_name = $_FILES['update_image']['tmp_name'];
-        $destination = "./Ảnh_sp/${update_name}";
-
         $update_weight = $_POST['update_weight'] ?? '';
         $update_color = $_POST['update_color'] ?? '';
         $update_brand = $_POST['update_brand'] ?? '';
         $update_gender = $_POST['update_gender'] ?? '';
         $update_category = $_POST['update_category'] ?? '';
-        
+
+        $update_image = $_FILES['update_image']['name'] ?? '';
+        $count_img = 0;
+        $destination[] = "";
+        for ( $i =0; $i<5; $i++) {
+            if ( $update_image[$i] ) {
+                $count_img++;
+            }
+            if ( empty($update_image[$i + 1]) ) {
+                break;
+            }
+            $destination = "./Ảnh_sp/".$update_name[$i];
+        }
+        $update_image_tmp_name = $_FILES['update_image']['tmp_name'];
+        $anh_sp = "";
+        for ( $i =0; $i < $count_img; $i++) {
+            move_uploaded_file( $update_image_tmp_name[$i], $destination[$i]);
+            $anh_sp .= $update_image[$i].', ';
+        }
+        $anh_sp = rtrim( $anh_sp, ", ");
+        echo $anh_sp;
         $sql = "UPDATE Products 
         SET productName = '$update_name', weight = '$update_weight', 
-        color = '$update_color', price = '$update_price', categoryName = '$update_category',
-        imageUrls = '$update_image', brand = '$update_brand', gender = '$update_gender' WHERE productId = '$id'";
-        
+        color = '$update_color', price = '$update_price', categoryName = '$update_category', 
+        brand = '$update_brand', gender = '$update_gender' WHERE productId = '$id';
+        UPDATE Image_Product SET imageUrls = '$anh_sp' WHERE productId = '$id';";
         $connection->prepare( $sql )->execute();
-        move_uploaded_file( $update_image_tmp_name, $destination);
-        $error = '<p style= "color: green;">Update successfully</p>';
         header('Location: ./upload_san_pham.php');
     }
-    
+    else if ( isset($_POST['cancel'])) {
+        header('Location: ./upload_san_pham.php');
+    }
+
     include './component/footer.php';
 ?>

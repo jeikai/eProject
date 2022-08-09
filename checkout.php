@@ -1,6 +1,6 @@
 <?php
     include './component/header.php';
-
+    
 ?>
 <div class="container">
 <head>
@@ -21,6 +21,7 @@
 
             $total = 0;
             $grand_total = 0;
+            $sale = '';
             if ( count($sp) > 0) {
                 foreach( $sp as $sp ) {
                     $total_price = number_format( $sp['price'] * $sp['quantity']);
@@ -31,8 +32,16 @@
         <?php
                 }
             }
+            if ( ($time >= '00:00' && $time <= '00:15') 
+            || ($time >= '09:00' && $time <= '09:15') 
+            || ($time >= '12:00' && $time <= '12:15') 
+            || ($time >= '18:00' && $time <= '18:15') 
+            || ($time >= '21:00' && $time <= '21:15')) {
+                $grand_total -= $grand_total * (30/100);
+                $sale = "Sale up to 30% in golden hour frame";
+            } 
         ?>
-        <span class="grand-total"> grand total : $<?= $grand_total; ?>/- </span>
+        <span class="grand-total"> grand total : $<?= $grand_total; ?>/- <?php echo $sale;?></span>
     </div>
 
     <div class="flex">
