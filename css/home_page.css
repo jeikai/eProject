@@ -1,14 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
 
-:root{
-    --green:#27ae60;
-    --dark-color:#219150;
-    --black:#444;
-    --light-color:#666;
-    --border:.1rem solid rgba(0,0,0,.1);
-    --border-hover:.1rem solid var(--black);
-    --box-shadow:0 .5rem 1rem rgba(0,0,0,.1);
-}
 .navbar {
 	background-color: rgba(158, 186, 48, 0.9) !important;
 }
@@ -49,7 +40,7 @@ html{
 
 .welcome hr {
     border-top: 2px dotted rgba(62,44,100, 0.6);
-	width: 95%;	
+	width: 100%;	
 }
 .col-md-4:hover {
     color: #e27d5f;
@@ -61,36 +52,7 @@ footer {
 .card-img-top {
     height: 300px;
 }
-.box{
-    text-transform: none;
-    padding:1.2rem 1.4rem;
-    font-size: 1.7rem;
-    color:var(--black);
-    border-radius: .5rem;
-    background-color: var(--white);
-    margin:1rem 0;
-    width: 100%;
- }
- .edit-form-container form .box{
-    width: 100%;
-    background-color: var(--bg-color);
-    border-radius: .5rem;
-    margin:1rem 0;
-    font-size: 1.7rem;
-    color:var(--black);
-    padding:1.2rem 1.4rem;
-    text-transform: none;
- }
- .add-product-form .box{
-    text-transform: none;
-    padding:1.2rem 1.4rem;
-    font-size: 1.7rem;
-    color:var(--black);
-    border-radius: .5rem;
-    background-color: var(--white);
-    margin:1rem 0;
-    width: 100%;
- }
+
  .message{
     background-color: var(--blue);
     position: sticky;
@@ -125,17 +87,9 @@ footer {
     float: left;
     width: 100%;
 }
-.search-container button {
-    float: right;
-    padding: 6px 10px;
-    background: #ddd;
-    font-size: 17px;
-    border: none;
-    cursor: pointer;
-
-}
-.search-container button:hover {
-    background: rgb(89, 87, 87);
+.search-container {
+    margin-top: 70px;
+    margin-bottom: 10px;
 }
 input[type=text] {
     padding: 6px;
@@ -170,7 +124,7 @@ input[type=text]:hover {
   h1 {
     font-size: 4.2rem;
     text-transform: uppercase;
-    animation: flicker 1.5s infinite alternate;     
+    animation: flicker 1.0s infinite alternate;     
   }
   @keyframes flicker {
     
@@ -192,3 +146,12 @@ input[type=text]:hover {
         text-shadow: none;
     }    
   }
+.golden_hour {
+    color: #e27d5f;
+}
+.normal_hour {
+    color: black;
+}
+.end_hour {
+    color: #e3e9e3;
+}

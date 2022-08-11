@@ -38,11 +38,12 @@
 		.nav-item a{
 			font-size: 20px;
 		}
+		
 	</style>
 </head>
 <body style="background: #84cdca;" >
 <!-- Navigation -->
-<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top" >
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top" style="position: fixed;width: 100%;">
 	<div class="container-fluid">
 		<a class="navbar-branch" href="#">
 			<img src="./Ảnh_website/logo.png" height="50" >
