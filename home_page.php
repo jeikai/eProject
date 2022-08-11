@@ -47,9 +47,8 @@ if(isset($message)){
    };
 };
 ?>
-
 <!-- Search button -->
-<div class="search-container nav-link">
+<div class="search-container nav-link" >
 	<form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 	<input type="text" placeholder="Search.." name="search">
 	</form>
@@ -82,11 +81,113 @@ if(isset($message)){
 		</div>
 	</div>
 </div>
-
 <!-- Time -->
 <hr>
 <p id="myTime" class="time neonText"></p>
-<hr>
+<!-- Sale time -->
+<?php
+	$sale_color[] = '';
+	$sale_status = array('', '','','','','');
+	$golden_time = array("00:00", "03:00", "09:00", "12:00", "18:00", "21:00");
+	if ( $time >= '00:00' && $time <= '00:15') {
+		$sale_color[0] = 'golden_hour';
+		$sale_status[0] = 'Opening';
+		for ( $i =1; $i <= 5; $i++) {
+				$sale_color[$i] = 'normal_hour';
+				$sale_status[$i] = 'Coming';
+		}
+	}
+	 if ( $time > '00:15') {
+		$sale_color[0] = 'end_hour';
+		$sale_status[0] = 'Ended';
+		for ( $i =1; $i <= 5; $i++) {
+			$sale_color[$i] = 'normal_hour';
+			$sale_status[$i] = 'Coming';
+		}
+	}
+	 if ( $time >= '03:00' && $time <= '03:15') {
+		$sale_color[1] = 'golden_hour';
+		$sale_status[1] = 'Opening';
+		for ( $i =2; $i <= 5; $i++) {
+				$sale_color[$i] = 'normal_hour';
+				$sale_status[$i] = 'Coming';
+		}
+	}
+	if ( $time > '03:15') {
+		$sale_color[1] = 'end_hour';
+		$sale_status[1] = 'Ended';
+		for ( $i =2; $i <= 5; $i++) {
+			$sale_color[$i] = 'normal_hour';
+			$sale_status[$i] = 'Coming';
+	}
+	}
+	if ( $time >= '09:00' && $time <= '09:15') {
+		$sale_color[2] = 'golden_hour';
+		$sale_status[2] = 'Opening';
+		for ( $i =3; $i <= 5; $i++) {
+				$sale_color[$i] = 'normal_hour';
+				$sale_status[$i] = 'Coming';
+		}
+	}
+	if ( $time > '09:15') {
+		$sale_color[2] = 'end_hour';
+		$sale_status[2] = 'Ended';
+		for ( $i =3; $i <= 5; $i++) {
+			$sale_color[$i] = 'normal_hour';
+			$sale_status[$i] = 'Coming';
+	}
+	}
+	if ( $time >= '12:00' && $time <= '12:15') {
+		$sale_color[3] = 'golden_hour';
+		$sale_status[3] = 'Opening';
+		for ( $i =4; $i <= 5; $i++) {
+				$sale_color[$i] = 'normal_hour';
+				$sale_status[$i] = 'Coming';
+		}
+	}
+	if ( $time > '12:15') {
+		$sale_color[3] = 'end_hour';
+		$sale_status[3] = 'Ended';
+		for ( $i =4; $i <= 5; $i++) {
+			$sale_color[$i] = 'normal_hour';
+			$sale_status[$i] = 'Coming';
+	}
+	}
+	if ( $time >= '18:00' && $time <= '18:15') {
+		$sale_color[4] = 'golden_hour';
+		$sale_status[4] = 'Opening';
+		$sale_color[5] = 'normal_hour';
+		$sale_status[5] = 'Coming';
+	}
+	if ( $time > '18:15') {
+		$sale_color[4] = 'end_hour';
+		$sale_status[4] = 'Ended';
+		$sale_color[5] = 'normal_hour';
+		$sale_status[5] = 'Coming';
+	}
+	if ( $time >= '21:00' && $time <= '21:15') {
+		$sale_color[5] = 'golden_hour';
+		$sale_status[5] = 'Opening';
+	}
+	if ( $time > '21:15') {
+		$sale_color[5] = 'end_hour';
+		$sale_status[5] = 'Ended';
+	}
+?>
+<div class="container-fluid padding">
+	<div class="row text-center">
+		<?php
+			for ( $i =0; $i <=5; $i++) {
+		?>
+		<div class="col-md-2 <?php echo $sale_color[$i];?>" >
+			<h3><?php echo $golden_time[$i];?></h3>
+			<p><?php echo $sale_status[$i];?></p>
+		</div>
+		<?php
+			}
+		?>
+	</div>
+</div>
 
 <div class="container-fluid padding">
 	<div class="row welcome text-center">
@@ -100,7 +201,6 @@ if(isset($message)){
 		</div>
 	</div>
 </div>
-
 <!-- Category -->
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <div class="container-fluid padding">
@@ -153,7 +253,6 @@ if(isset($message)){
 </div>
 </form>
 
-<!-- brand name -->
 <div class="container-fluid padding" >
 	<div class="row text-center" >
 		<div class="col-md-2 ">
@@ -259,98 +358,80 @@ if(isset($message)){
 			
 	} else {
 ?>
-
 <div class="container-fluid padding">
 	<hr>
 	<a  name="Victorinox"><h2 style="text-align: center;"><?php echo $filter ="Victorinox"; ?></h2></a>
 	<?php 
 		$sp = select_from($filter, $connection);
 		foreach ( $sp as $sp) {
-	?>
-	<?php
 			include './detail_product.php';
-	?>	
-	<?php
 		}
 	?>
-
 </div>
-
-
 <div class="container-fluid padding">
 	<hr>
 	<a  name="samsonite"><h2 style="text-align: center;"><?php echo $filter ="Samsonite"; ?></h2></a>
 	<?php 
 		$sp = select_from($filter, $connection);
 		foreach ( $sp as $sp) {
-	?>
-	<?php
 			include './detail_product.php';
-		?>	
-	<?php
 		}
 	?>
 
 </div>
-
-
 <div class="container-fluid padding">
 	<hr>
 	<a  name="hublot"><h2 style="text-align: center;"><?php echo $filter ="Hublot"; ?></h2></a>
 	<?php 
 		$sp = select_from($filter, $connection);
 		foreach ( $sp as $sp) {
-	?>
-	<?php
 			include './detail_product.php';
-		?>	
-	<?php
 		}
 	?>
 </div>
-
-
 <div class="container-fluid padding">
 	<hr>
 	<a  name="fossil"><h2 style="text-align: center;"><?php echo $filter ="Fossil"; ?></h2></a>
 	<?php 
 		$sp = select_from($filter, $connection);
 		foreach ( $sp as $sp) {
-	?>
-	<?php
 			include './detail_product.php';
-		?>	
-	<?php
 		}
 	?>
 </div>
-
 <div class="container-fluid padding">
 	<hr>
 	<a  name="fendi"><h2 style="text-align: center;"><?php echo $filter ="Fendi"; ?></h2></a>
 	<?php 
 		$sp = select_from($filter, $connection);
 		foreach ( $sp as $sp) {
-	?>
-	<?php
 			include './detail_product.php';
-		?>	
-	<?php
 		}
 	?>
 </div>
-
 <div class="container-fluid padding">
 	<hr>
 	<a  name="lipault"><h2 style="text-align: center;"><?php echo $filter ="Lipault"; ?></h2></a>
 	<?php 
 		$sp = select_from($filter, $connection);
 		foreach ( $sp as $sp) {
-	?>
-	<?php
 			include './detail_product.php';
-		?>	
+		}
+	?>
+</div>
+<div class="container-fluid padding">
+	<hr>
+	<h2 style="text-align: center;"><?php echo $filter ="Others"; ?></h2>
 	<?php
+		$sql = "SELECT * FROM Products WHERE brand != 'Victorinox' AND brand != 'samsonite' 
+		AND brand != 'hublot' AND brand != 'fendi' AND brand != 'fossil' AND brand != 'lipault';";
+		$statement = $connection->prepare($sql);
+        $statement->execute();
+    	//Chế độ đọc dữ liệu ra
+        $result = $statement->setFetchMode ( PDO::FETCH_ASSOC);
+		$sp = $statement->fetchAll();
+		foreach ( $sp as $sp) {
+			include './detail_product.php';
 		}
 	?>
 </div>
