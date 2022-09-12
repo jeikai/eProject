@@ -12,6 +12,19 @@
 	}
 	date_default_timezone_set("Asia/Bangkok");
     $time = date("H:i");
+	function check_time ( $time ) {
+		if (($time >= '00:00' && $time <= '00:15')
+		|| ($time >= '03:00' && $time <= '03:15') 
+		|| ($time >= '09:00' && $time <= '09:15') 
+		|| ($time >= '12:00' && $time <= '12:15') 
+		|| ($time >= '18:00' && $time <= '18:15') 
+		|| ($time >= '21:00' && $time <= '21:15')) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
 ?>
 
 <!DOCTYPE html>

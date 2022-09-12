@@ -84,12 +84,7 @@
         <?php
             $grand_total += $sum;
             }
-            if ( ($time >= '00:00' && $time <= '00:15')
-            || ($time >= '03:00' && $time <= '03:15') 
-            || ($time >= '09:00' && $time <= '09:15') 
-            || ($time >= '12:00' && $time <= '12:15') 
-            || ($time >= '18:00' && $time <= '18:15') 
-            || ($time >= '21:00' && $time <= '21:15')) {
+            if ( check_time($time)) {
                 $grand_total -= $grand_total * (30/100);
                 $sale = "Sale up to 30% in golden hour frame";
             } 
